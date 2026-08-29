@@ -363,4 +363,18 @@ cat informacion/datos.txt
 
 También puede abrir el proyecto con un editor de código como Visual Studio Code:
 code .
+(De esta manera, el Usuario 2 trabaja con la copia local de los archivos que fueron almacenados originalmente en GitHub.)
 
+15. ¿Qué ocurre cuando el Usuario 1 actualiza la información?
+
+Si el Usuario 1 agrega nueva información y la sube:
+git add .
+git commit -m "Actualiza información"
+git push
+
+GitHub tendrá una versión más reciente.
+El Usuario 2 debe actualizar su copia local.
+
+Desde la carpeta del proyecto ejecuta:
+git pull
+(Esto descarga los cambios realizados en GitHub y los integra en su copia local.)
