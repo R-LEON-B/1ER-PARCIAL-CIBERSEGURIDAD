@@ -378,3 +378,60 @@ El Usuario 2 debe actualizar su copia local.
 Desde la carpeta del proyecto ejecuta:
 git pull
 (Esto descarga los cambios realizados en GitHub y los integra en su copia local.)
+
+b_Tiene una red de computadores y necesita visualizar mediante consola los siguiente ítems:
+
+¿Cómo visualiza que existe conexión de cada
+pc a internet?
+
+RTA/
+En CMD:
+
+ping 8.8.8.8
+
+Si aparecen respuestas como Reply from..., la PC tiene conectividad hacia Internet.
+
+¿Cómo visualiza que la red 1 es
+independiente de la red 2?
+
+RTA/
+Primero revise las direcciones IP de los equipos:
+
+ipconfig
+
+Por ejemplo:
+
+Red 1: 192.168.1.x
+
+Red 2: 192.168.2.x
+
+Luego puede comprobar conectividad entre equipos:
+
+ping 192.168.2.10
+
+Si un equipo de la Red 1 no puede comunicarse con uno de la Red 2, mientras sí puede comunicarse con equipos de su propia red, eso ayuda a verificar la separación.
+
+¿Cómo explora los procesos y tareas desde la
+consola de windows?
+
+RTA/
+Para mostrar los procesos en CMD:
+
+tasklist
+
+¿Cómo observa el almacenamiento de los
+discos y la memoria RAM usada?
+
+RTA/
+Para conocer el espacio disponible en los discos:
+
+wmic logicaldisk get caption,size,freespace
+
+¿Cómo hace una copia de seguridad de los
+dispositivos en el pc?
+
+RTA/
+Para copiar archivos desde la consola de Windows puede utilizar Robocopy. Por ejemplo:
+
+robocopy C:\Usuarios\Nombre\Documentos D:\Backup\Documentos /E.
+
