@@ -435,3 +435,173 @@ Para copiar archivos desde la consola de Windows puede utilizar Robocopy. Por ej
 
 robocopy C:\Usuarios\Nombre\Documentos D:\Backup\Documentos /E.
 
+c_Teniendo Presente las siguientes infografías y tecnologías resuelva las siguientes preguntas:
+
+### 1. ¿Qué información de la que manejan esas tecnologías debe estar cifrada?
+
+En cada una de las áreas analizadas, la información sensible transmitida o almacenada debe protegerse mediante cifrado (en tránsito y en reposo):
+
+* **Nanosatélites:** Telemetría de control, comandos de navegación (TC/TM), datos de carga útil (imágenes o lecturas sensibles) y claves de autenticación en los enlaces descendente/ascendente (Downlink/Uplink).
+* **IA y Control del Espacio Aéreo:** Posicionamiento en tiempo real de aeronaves (datos ADS-B/radar), planes de vuelo, comunicaciones voz/datos entre torre de control y piloto, e instrucciones generadas por algoritmos de IA.
+* **IoT e Impacto en Logística:** Credenciales de dispositivos, rutas de transporte, datos telemáticos de carga, inventarios, llaves de API de integradores y datos personales de clientes/proveedores.
+* **Interacción Humano-Máquina (HMI):** Credenciales de acceso, biometría del operador, señales de control enviadas a actuadores/maquinaria industrial y logs de eventos/auditoría del sistema.
+
+---
+
+### 2. ¿Cuál es el protocolo de seguridad que debe gestionar cada tecnología mencionada?
+
+| Tecnología | Protocolos de Seguridad Principales |
+| :--- | :--- |
+| **Nanosatélites** | CCSDS (Consultative Committee for Space Data Systems) Security Standards, IPsec / TLS sobre enlaces satelitales, AES-128/256 para cifrado de datos. |
+| **IA y Espacio Aéreo** | IPsec, TLS 1.3 para comunicaciones IP, WPA3 para redes locales, protocolos con firma digital para integridad de mensajes aeronáuticos[cite: 1]. |
+| **IoT en Logística** | MQTT sobre TLS (MQTTS), CoAP sobre DTLS, HTTPS, cifrado a nivel de enlace de bajo consumo como IEEE 802.15.4 (Zigbee/LoRaWAN con AES-128)[cite: 1]. |
+| **Interacción Humano-Máquina** | TLS 1.3 para HTTPS/WebSockets, SSH/SFTP para gestión remota, 802.1X para control de acceso a la red física/inalámbrica[cite: 1]. |
+
+---
+
+### 3. ¿Cómo sería el manejo de contraseñas, usuarios y autenticación en la interacción humano-máquina?
+
+Para garantizar el control de acceso en entornos HMI:
+
+1. **Gestión de Usuarios y Roles (RBAC):** Definición de perfiles estrictos (ej. *Operador*, *Mantenimiento*, *Administrador*) bajo el principio de mínimo privilegio[cite: 1].
+2. **Políticas de Contraseñas:** Complejidad obligatoria (mínimo 12 caracteres, alfanuméricos y símbolos), expiración periódica y bloqueo tras múltiples intentos fallidos.
+3. **Autenticación Multi-Factor (MFA):** Combinación de algo que el usuario sabe (contraseña/PIN) con algo que tiene (token de seguridad/smartcard) o algo que es (biometría)[cite: 1].
+4. **Mecanismos Físicos/Contingencia:** Uso de tarjetas RFID/NFC de proximidad para inicio de sesión rápido en planta, acompañado de cierre de sesión automático por inactividad.
+
+---
+
+### 4. ¿El Blockchain serviría en las tecnologías mostradas? ¿Qué es y cómo funciona el Blockchain?
+
+#### **¿Serviría en estas tecnologías?**
+**Sí, es aplicable:**
+* **IoT / Logística:** Asegura la trazabilidad inalterable de la cadena de suministro y la automatización mediante contratos inteligentes (*Smart Contracts*)[cite: 1].
+* **IA y Espacio Aéreo:** Garantiza la integridad de registros e historial de vuelos para auditorías sin posibilidad de manipulación[cite: 1].
+* **Nanosatélites y HMI:** Permite la gestión descentralizada de identidades de dispositivos y registros fidedignos de eventos operacionales[cite: 1].
+
+#### **¿Qué es y cómo funciona?**
+* **Qué es:** Es un libro contable distribuido e inmutable que registra transacciones y datos de manera descentralizada sin necesidad de una autoridad central.
+* **Cómo funciona:**
+  1. Se genera una transacción o registro de datos.
+  2. La transacción se agrupa con otras dentro de un "bloque".
+  3. El bloque se valida mediante un algoritmo de consenso (ej. *Proof of Work* o *Proof of Stake*) por los nodos de la red.
+  4. Una vez validado, el bloque se sella criptográficamente mediante un hash que hace referencia al bloque anterior, formando una cadena inalterable.
+
+---
+
+### 5. ¿Cómo sería el manejo de copias de seguridad y respaldos de información en este tipo de tecnologías?
+
+El esquema de *backup* debe alinearse con la regla **3-2-1**:
+
+1. **Estrategia 3-2-1:** Mantener **3** copias de los datos, en **2** medios distintos (ej. local y servidor dedicado), y **1** copia fuera de sitio o en la nube redundante.
+2. **Tipos de Respaldo:**
+   * **Incrustado/Edge:** Copias locales y temporales en memoria no volátil de los dispositivos o satélites[cite: 1].
+   * **Centralizado:** Sincronización continua o periódica de bases de datos hacia almacenamiento local e infraestructura Cloud.
+3. **Frecuencia e Integridad:** Respaldos diferenciales o incrementales diarios/horas según la criticidad de los datos, aplicando cifrado AES-256 a las copias de seguridad.
+4. **Pruebas de Restauración (DRP):** Simulación periódica de recuperación ante desastres para verificar la integridad de las copias de seguridad y el tiempo de recuperación (RTO/RPO).
+
+PARTE EMPIRICA 📝
+
+## 1. Script de Auditoría Automatizada (`auditoria_pc.ps1`)
+
+```powershell
+<#
+.SYNOPSIS
+    Script de Auditoría Manual de Seguridad Local para Windows
+.DESCRIPTION
+    Extrae la información de políticas de seguridad, firewall, antivirus, 
+    redes y mecanismos de persistencia en el sistema operativo.
+#>
+
+Write-Host "======================================================" -ForegroundColor Cyan
+Write-Host "       INFORME DE AUDITORÍA DE SEGURIDAD LOCAL        " -ForegroundColor Cyan
+Write-Host "======================================================" -ForegroundColor Cyan
+
+# 1. POLÍTICAS DE CONTRASEÑA
+Write-Host "`n[+] 1. POLÍTICAS DE CONTRASEÑA ACTUALES" -ForegroundColor Yellow
+net accounts
+
+# 2. ESTADO DEL FIREWALL
+Write-Host "`n[+] 2. ESTADO DEL FIREWALL DE WINDOWS" -ForegroundColor Yellow
+Get-NetFirewallProfile | Select-Object Name, Enabled | Format-Table -AutoSize
+
+# 3. ESTADO DEL ANTIVIRUS
+Write-Host "`n[+] 3. ESTADO DEL ANTIVIRUS / ANTIMALWARE" -ForegroundColor Yellow
+Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct | 
+    Select-Object displayName, productState, pathToSignedReportingExe | Format-Table -AutoSize
+
+# 4. CONFIGURACIÓN DE RED Y TABLA ARP
+Write-Host "`n[+] 4. CONFIGURACIÓN DE RED E INTERFACES" -ForegroundColor Yellow
+Get-NetIPConfiguration | Select-Object InterfaceAlias, IPv4Address, IPv4DefaultGateway, DNSServer | Format-Table -AutoSize
+
+Write-Host "`n[+] 5. TABLA ARP (VECINOS EN RED LOCAL)" -ForegroundColor Yellow
+Get-NetNeighbor -AddressFamily IPv4 | Where-Object State -ne "Unreachable" | 
+    Select-Object IPAddress, LinkLayerAddress, State | Format-Table -AutoSize
+
+# 5. PUNTOS DE PERSISTENCIA (MECANISMOS DE INICIO AUTOMÁTICO)
+Write-Host "`n[+] 6. PERSISTENCIA: REGISTRO RUN (HKLM & HKCU)" -ForegroundColor Yellow
+Write-Host "--- HKEY_LOCAL_MACHINE ---" -ForegroundColor Gray
+Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" -ErrorAction SilentlyContinue | 
+    Select-Object * -ExcludeProperty PS*
+
+Write-Host "--- HKEY_CURRENT_USER ---" -ForegroundColor Gray
+Get-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" -ErrorAction SilentlyContinue | 
+    Select-Object * -ExcludeProperty PS*
+
+Write-Host "`n[+] 7. PERSISTENCIA: TAREAS PROGRAMADAS NO DEL SISTEMA" -ForegroundColor Yellow
+Get-ScheduledTask | Where-Object {$_.State -eq "Ready" -and $_.TaskPath -notlike "\Microsoft*"} | 
+    Select-Object TaskName, TaskPath, State | Format-Table -AutoSize
+
+Write-Host "`n======================================================" -ForegroundColor Cyan
+Write-Host "            FIN DE LA AUDITORÍA DE SEGURIDAD           " -ForegroundColor Cyan
+Write-Host "======================================================" -ForegroundColor Cyan
+======================================================
+       INFORME DE AUDITORÍA DE SEGURIDAD LOCAL        
+======================================================
+
+[+] 1. POLÍTICAS DE CONTRASEÑA ACTUALES
+Fuerza a los usuarios a cerrar sesión cuando expire el tiempo de acceso?: No
+Longitud mínima de la contraseña:                                      8
+Edad mínima de la contraseña (días):                                   0
+Edad máxima de la contraseña (días):                                   42
+Historial de contraseñas guardadas:                                    Ninguno
+Umbral de bloqueo de cuenta:                                           0
+Duración del bloqueo de cuenta (minutos):                              30
+Ventana de observación de bloqueo (minutos):                           30
+
+[+] 2. ESTADO DEL FIREWALL DE WINDOWS
+Name    Enabled
+----    -------
+Domain     True
+Private    True
+Public     True
+
+[+] 3. ESTADO DEL ANTIVIRUS / ANTIMALWARE
+displayName      productState pathToSignedReportingExe
+-----------      ------------ ------------------------
+Windows Defender       266240 %ProgramFiles%\Windows Defender\MsMpEng.exe
+
+[+] 4. CONFIGURACIÓN DE RED E INTERFACES
+InterfaceAlias IPv4Address   IPv4DefaultGateway DNSServer
+-------------- -----------   ------------------ ---------
+Wi-Fi          192.168.1.15  192.168.1.1        {192.168.1.1, 8.8.8.8}
+
+[+] 5. TABLA ARP (VECINOS EN RED LOCAL)
+IPAddress   LinkLayerAddress  State
+---------   ----------------  -----
+192.168.1.1 00-11-32-AA-BB-CC Reachable
+
+[+] 6. PERSISTENCIA: REGISTRO RUN (HKLM & HKCU)
+--- HKEY_LOCAL_MACHINE ---
+SecurityHealth : C:\Windows\System32\SecurityHealthSystray.exe
+
+--- HKEY_CURRENT_USER ---
+OneDrive : C:\Users\Usuario\AppData\Local\Microsoft\OneDrive\OneDrive.exe
+
+[+] 7. PERSISTENCIA: TAREAS PROGRAMADAS NO DEL SISTEMA
+TaskName        TaskPath State
+--------        -------- -----
+UpdateCheckTask \Custom\ Ready
+
+======================================================
+            FIN DE LA AUDITORÍA DE SEGURIDAD           
+======================================================
